@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Global Data Explorer</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+    <header class="hero">
+
+        <div class="hero-content">
+
+            <p class="eyebrow">
+                WORLD BANK DATA
+            </p>
+
+            <h1>
+                Global Data Explorer
+            </h1>
+
+            <p class="hero-description">
+                Compare economic and social trends between countries
+                using real-world data.
+            </p>
+
+        </div>
+
+    </header>
+
+
+    <main class="page-container">
+
+        <section class="controls-card">
+
+            <p class="small-label">
+                BUILD A COMPARISON
+            </p>
+
+            <h2>
+                Explore the data
+            </h2>
+
+
+            <div class="controls-grid">
+
+                <div class="input-group">
+
+                    <label for="country1">
+                        Country 1
+                    </label>
+
+                    <select id="country1">
+
+                        <option value="USA">United States</option>
+                        <option value="IND">India</option>
+                        <option value="CHN">China</option>
+                        <option value="JPN">Japan</option>
+                        <option value="DEU">Germany</option>
+                        <option value="FRA">France</option>
+                        <option value="GBR">United Kingdom</option>
+                        <option value="CAN">Canada</option>
+                        <option value="BRA">Brazil</option>
+                        <option value="MEX">Mexico</option>
+                        <option value="AUS">Australia</option>
+                        <option value="KOR">South Korea</option>
+                        <option value="ZAF">South Africa</option>
+                        <option value="ITA">Italy</option>
+                        <option value="ESP">Spain</option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="input-group">
+
+                    <label for="country2">
+                        Country 2
+                    </label>
+
+                    <select id="country2">
+
+                        <option value="IND">India</option>
+                        <option value="USA">United States</option>
+                        <option value="CHN">China</option>
+                        <option value="JPN">Japan</option>
+                        <option value="DEU">Germany</option>
+                        <option value="FRA">France</option>
+                        <option value="GBR">United Kingdom</option>
+                        <option value="CAN">Canada</option>
+                        <option value="BRA">Brazil</option>
+                        <option value="MEX">Mexico</option>
+                        <option value="AUS">Australia</option>
+                        <option value="KOR">South Korea</option>
+                        <option value="ZAF">South Africa</option>
+                        <option value="ITA">Italy</option>
+                        <option value="ESP">Spain</option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="input-group">
+
+                    <label for="indicator">
+                        Indicator
+                    </label>
+
+                    <select id="indicator">
+
+                        <option value="SP.DYN.LE00.IN">
+                            Life Expectancy
+                        </option>
+
+                        <option value="NY.GDP.PCAP.CD">
+                            GDP per Capita
+                        </option>
+
+                        <option value="SP.POP.TOTL">
+                            Population
+                        </option>
+
+                        <option value="SL.UEM.TOTL.ZS">
+                            Unemployment Rate
+                        </option>
+
+                        <option value="EN.ATM.CO2E.PC">
+                            CO₂ Emissions per Capita
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="input-group">
+
+                    <label for="startYear">
+                        Start Year
+                    </label>
+
+                    <input
+                        type="number"
+                        id="startYear"
+                        min="1960"
+                        max="2026"
+                        value="2000"
+                    >
+
+                </div>
+
+
+                <div class="input-group">
+
+                    <label for="endYear">
+                        End Year
+                    </label>
+
+                    <input
+                        type="number"
+                        id="endYear"
+                        min="1960"
+                        max="2026"
+                        value="2024"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <button
+                id="analyzeButton"
+                class="primary-button"
+            >
+                Analyze Data
+            </button>
+
+        </section>
+
+
+        <div
+            id="loading"
+            class="loading hidden"
+        >
+            Loading World Bank data...
+        </div>
+
+
+        <div
+            id="errorMessage"
+            class="error-message hidden"
+        >
+        </div>
+
+
+        <section class="chart-card">
+
+            <p class="small-label">
+                COMPARISON
+            </p>
+
+            <h2 id="chartTitle">
+                Life Expectancy Comparison
+            </h2>
+
+            <div class="chart-container">
+
+                <canvas id="dataChart"></canvas>
+
+            </div>
+
+        </section>
+
+
+        <section class="country-comparison">
+
+            <div class="country-card">
+
+                <p class="small-label">
+                    COUNTRY 1
+                </p>
+
+                <h2 id="country1Title">
+                    United States
+                </h2>
+
+
+                <div class="statistics-grid">
+
+                    <div class="stat-card">
+                        <span>Latest</span>
+                        <strong id="country1Latest">--</strong>
+                    </div>
+
+                    <div class="stat-card">
+                        <span>Average</span>
+                        <strong id="country1Average">--</strong>
+                    </div>
+
+                    <div class="stat-card">
+                        <span>Minimum</span>
+                        <strong id="country1Minimum">--</strong>
+                    </div>
+
+                    <div class="stat-card">
+                        <span>Maximum</span>
+                        <strong id="country1Maximum">--</strong>
+                    </div>
+
+                    <div class="stat-card">
+                        <span>Range</span>
+                        <strong id="country1Range">--</strong>
+                    </div>
+
+                    <div class="stat-card">
+                        <span>Percent Change</span>
+                        <strong id="country1Change">--</strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="country-card">
+
+                <p class="small-label">
+                    COUNTRY 2
+                </p>
+
+                <h2 id="country2Title">
+                    India
+                </h2>
+
+
+                <div class="statistics-grid">
+
+                    <div class="stat-card">
+                        <span>Latest</span>
+                        <strong id="country2Latest">--</strong>
+                    </div>
+
+                    <div class="stat-card">
+                        <span>Average</span>
+                        <strong id="country2Average">--</strong>
+                    </div>
+
+                    <div class="stat-card">
+                        <span>Minimum</span>
+                        <strong id="country2Minimum">--</strong>
+                    </div>
+
+                    <div class="stat-card">
+                        <span>Maximum</span>
+                        <strong id="country2Maximum">--</strong>
+                    </div>
+
+                    <div class="stat-card">
+                        <span>Range</span>
+                        <strong id="country2Range">--</strong>
+                    </div>
+
+                    <div class="stat-card">
+                        <span>Percent Change</span>
+                        <strong id="country2Change">--</strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section class="about-card">
+
+            <p class="small-label">
+                ABOUT
+            </p>
+
+            <h2>
+                About Global Data Explorer
+            </h2>
+
+            <p>
+                Global Data Explorer lets users compare economic
+                and social indicators between two countries over time.
+            </p>
+
+            <p>
+                The Flask backend retrieves information from the World
+                Bank API and analyzes it before sending it to the
+                JavaScript frontend.
+            </p>
+
+            <p>
+                Chart.js displays the results as an interactive graph.
+            </p>
+
+        </section>
+
+    </main>
+
+
+    <footer>
+
+        <p>
+            Global Data Explorer · CMU 15-113 Project 2
+        </p>
+
+    </footer>
+
+
+    <script
+        src="{{ url_for('static', filename='script.js') }}"
+    >
+    </script>
+
+</body>
+
+</html>
